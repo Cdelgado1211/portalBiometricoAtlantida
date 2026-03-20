@@ -78,13 +78,13 @@ export const useBiometricFlow = (): UseBiometricFlowResult => {
 
     resolveBiometricSession(sessionId)
       .then((response) => {
-        if (!response.ok) {
+        if (!response.ok || response.valid === false) {
           setUiState(BiometricUiState.SESSION_INVALID);
           setErrorType("session-invalid");
           return;
         }
 
-        if (response.status !== "PENDING") {
+        if (response.status !== "PENDING" && response.status !== "LIVENESS_CREATED") {
           setUiState(BiometricUiState.SESSION_INVALID);
           setErrorType("session-invalid");
           return;
@@ -189,4 +189,3 @@ export const useBiometricFlow = (): UseBiometricFlowResult => {
     handleRetry
   };
 };
-

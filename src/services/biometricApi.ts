@@ -12,10 +12,11 @@ export function resolveBiometricSession(
   biometricSessionId: string
 ): Promise<ResolveBiometricSessionResponse> {
   const payload: ResolveBiometricSessionRequest = {
+    action: "resolve_session",
     biometric_session_id: biometricSessionId
   };
   return httpPost<ResolveBiometricSessionRequest, ResolveBiometricSessionResponse>(
-    "/session/resolve",
+    "/",
     payload
   );
 }
@@ -24,10 +25,11 @@ export function createLivenessSession(
   biometricSessionId: string
 ): Promise<CreateLivenessSessionResponse> {
   const payload: CreateLivenessSessionRequest = {
+    action: "create_liveness_session",
     biometric_session_id: biometricSessionId
   };
   return httpPost<CreateLivenessSessionRequest, CreateLivenessSessionResponse>(
-    "/liveness/create",
+    "/",
     payload
   );
 }
@@ -37,12 +39,12 @@ export function validateIdentity(
   rekognitionSessionId: string
 ): Promise<ValidateIdentityResponse> {
   const payload: ValidateIdentityRequest = {
+    action: "validate_identity",
     biometric_session_id: biometricSessionId,
     rekognition_session_id: rekognitionSessionId
   };
   return httpPost<ValidateIdentityRequest, ValidateIdentityResponse>(
-    "/identity/validate",
+    "/",
     payload
   );
 }
-

@@ -18,7 +18,11 @@ export type KnownErrorType =
   | "unexpected"
   | null;
 
-export interface ResolveBiometricSessionRequest {
+interface BaseActionRequest {
+  action: string;
+}
+
+export interface ResolveBiometricSessionRequest extends BaseActionRequest {
   biometric_session_id: string;
 }
 
@@ -27,9 +31,11 @@ export interface ResolveBiometricSessionResponse {
   biometric_session_id: string;
   collection_id: string;
   status: "PENDING" | "USED" | "EXPIRED" | string;
+  valid?: boolean;
+  reason?: string;
 }
 
-export interface CreateLivenessSessionRequest {
+export interface CreateLivenessSessionRequest extends BaseActionRequest {
   biometric_session_id: string;
 }
 
@@ -39,7 +45,7 @@ export interface CreateLivenessSessionResponse {
   region: string;
 }
 
-export interface ValidateIdentityRequest {
+export interface ValidateIdentityRequest extends BaseActionRequest {
   biometric_session_id: string;
   rekognition_session_id: string;
 }
@@ -59,4 +65,3 @@ export interface RekognitionSessionInfo {
   sessionId: string;
   region: string;
 }
-

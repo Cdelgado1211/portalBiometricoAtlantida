@@ -1,11 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string | undefined;
-
-if (!API_BASE_URL) {
-  // eslint-disable-next-line no-console
-  console.warn(
-    "VITE_API_BASE_URL no está configurado. Configura la URL del backend biométrico."
-  );
-}
+const API_BASE_URL =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ||
+  "https://4r4jghjuorc6m7eqsc7nfg6k6u0utijb.lambda-url.us-east-1.on.aws/";
 
 export interface ApiErrorShape {
   message: string;
@@ -48,4 +43,3 @@ export async function httpPost<TRequest, TResponse>(
     throw new ApiError("Invalid JSON response", response.status);
   }
 }
-
