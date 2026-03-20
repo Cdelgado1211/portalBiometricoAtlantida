@@ -6,8 +6,11 @@ import { Amplify } from "aws-amplify";
 
 Amplify.configure({
   Auth: {
-    identityPoolId: "us-east-1:bac71bc9-7868-4d38-a967-2434283e0bf0",
-    region: "us-east-1"
+    Cognito: {
+      identityPoolId: "us-east-1:bac71bc9-7868-4d38-a967-2434283e0bf0",
+      allowGuestAccess: true,
+      region: "us-east-1"
+    }
   }
 });
 
