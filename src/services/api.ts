@@ -1,6 +1,6 @@
 const API_BASE_URL =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) ||
-  "https://4r4jghjuorc6m7eqsc7nfg6k6u0utijb.lambda-url.us-east-1.on.aws/";
+  ((import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/+$/, "")) ||
+  "https://4r4jghjuorc6m7eqsc7nfg6k6u0utijb.lambda-url.us-east-1.on.aws";
 
 export interface ApiErrorShape {
   message: string;
