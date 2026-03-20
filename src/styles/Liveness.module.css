@@ -1,0 +1,32 @@
+.livenessContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.detectorWrapper {
+  margin-top: 10px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #020617;
+}
+
+.helperText {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+

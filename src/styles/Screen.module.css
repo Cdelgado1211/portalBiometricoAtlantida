@@ -1,0 +1,74 @@
+.screenContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.message {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.messageGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spinner {
+  margin-top: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 3px solid #d1d5db;
+  border-top-color: #2563eb;
+  animation: spin 0.9s linear infinite;
+}
+
+.primaryButton {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.08s ease,
+    background-color 0.15s ease;
+}
+
+.primaryButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.list {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

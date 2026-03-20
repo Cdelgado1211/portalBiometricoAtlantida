@@ -1,0 +1,21 @@
+.progressContainer {
+  position: relative;
+  height: 4px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background-color: #e5e7eb;
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1d4ed8, #22c55e);
+  transition: width 0.25s ease;
+}
+
