@@ -30,9 +30,11 @@ export const LivenessStep: React.FC<LivenessStepProps> = ({
           region={rekognitionSession.region}
           onAnalysisComplete={onComplete}
           onError={(err) => {
-            const message =
-              err instanceof Error ? err : new Error("Liveness error");
-            onError(message);
+            // Propagamos el error real para poder
+            // ver el detalle en consola y en logs.
+            const normalizedError =
+              err instanceof Error ? err : new Error(String(err));
+            onError(normalizedError);
           }}
         />
       </div>
@@ -40,4 +42,3 @@ export const LivenessStep: React.FC<LivenessStepProps> = ({
     </div>
   );
 };
-
