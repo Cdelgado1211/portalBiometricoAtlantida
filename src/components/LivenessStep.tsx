@@ -30,10 +30,24 @@ export const LivenessStep: React.FC<LivenessStepProps> = ({
           region={rekognitionSession.region}
           onAnalysisComplete={onComplete}
           onError={(err) => {
-            // Propagamos el error real para poder
-            // ver el detalle en consola y en logs.
-            const normalizedError =
-              err instanceof Error ? err : new Error(String(err));
+            // Logueamos el error bruto que entrega el componente
+            // para poder ver todos sus campos.
+            // eslint-disable-next-line no-console
+            console.error("Raw liveness error object:", err);
+
+            let normalizedError: Error;
+            if (err instanceof Error) {
+              normalizedError = err;
+            } else if (err && typeof err === "object" && "message" in err) {
+              normalizedError = new Error(String((err as { message: unknown }).message));
+            } else {
+              try {
+                normalizedError = new Error(JSON.stringify(err));
+              } catch {
+                normalizedError = new Error(String(err));
+              }
+            }
+
             onError(normalizedError);
           }}
         />
