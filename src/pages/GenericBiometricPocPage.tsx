@@ -20,6 +20,13 @@ export const GenericBiometricPocPage: React.FC = () => {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isCameraLoading, setIsCameraLoading] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
+  const [location, setLocation] = useState<{
+    lat: number;
+    lon: number;
+    accuracy?: number;
+  } | null>(null);
+  const [locationLabel, setLocationLabel] = useState<string | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -109,6 +116,67 @@ export const GenericBiometricPocPage: React.FC = () => {
     closeCamera();
   };
 
+  const reverseGeocode = async (lat: number, lon: number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
+      );
+      if (!response.ok) {
+        return;
+      }
+      const data = await response.json();
+      const address = data.address || {};
+      const city =
+        address.city ||
+        address.town ||
+        address.village ||
+        address.municipality;
+      const parts = [
+        city,
+        address.state,
+        address.country,
+      ].filter(Boolean) as string[];
+
+      if (parts.length > 0) {
+        setLocationLabel(parts.join(", "));
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error resolviendo ubicación a ciudad/país", error);
+    }
+  };
+
+  const requestLocation = () => {
+    setLocationError(null);
+    setLocationLabel(null);
+
+    if (!navigator.geolocation) {
+      setLocationError("Tu navegador no soporta ubicación.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const loc = {
+          lat: pos.coords.latitude,
+          lon: pos.coords.longitude,
+          accuracy: pos.coords.accuracy,
+        };
+        setLocation(loc);
+        void reverseGeocode(loc.lat, loc.lon);
+      },
+      (err) => {
+        // eslint-disable-next-line no-console
+        console.error("Error obteniendo ubicación", err);
+        setLocationError("No se pudo obtener la ubicación.");
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 10000,
+      }
+    );
+  };
+
   useEffect(() => {
     // Cuando la cámara está abierta y ya tenemos el stream,
     // vinculamos el stream al elemento <video> y damos play.
@@ -135,6 +203,9 @@ export const GenericBiometricPocPage: React.FC = () => {
   const handleStartLiveness = async () => {
     setErrorMessage(null);
     setResult(null);
+    // Limpiamos ubicación previa y pedimos la nueva (si el usuario acepta permiso).
+    setLocation(null);
+    requestLocation();
 
     if (!idImageBase64) {
       setErrorMessage("Debes seleccionar una imagen de la cédula.");
@@ -408,6 +479,19 @@ export const GenericBiometricPocPage: React.FC = () => {
                 <p>
                   Confianza de liveness:{" "}
                   {result.liveness_confidence?.toFixed(2)}%
+                </p>
+              )}
+              {location && (
+                <p>
+                  Ubicación aproximada:{" "}
+                  {locationLabel
+                    ? locationLabel
+                    : `${location.lat.toFixed(4)}, ${location.lon.toFixed(4)}`}
+                </p>
+              )}
+              {locationError && !location && (
+                <p style={{ fontSize: "0.85rem", color: "#6b7280" }}>
+                  {locationError}
                 </p>
               )}
               {result.reason && (

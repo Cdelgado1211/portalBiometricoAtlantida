@@ -8,6 +8,15 @@ export const LIVENESS_DISPLAY_TEXT_ES: LivenessDisplayText = {
   hintFaceOffCenterText:
     "Tu rostro no está dentro del óvalo. Centra tu rostro frente a la cámara.",
 
+  // Indicaciones durante la prueba
+  hintMoveFaceFrontOfCameraText: "Coloca tu rostro frente a la cámara",
+  hintTooFarText: "Acércate un poco más",
+  hintTooCloseText: "Aléjate un poco",
+  hintConnectingText: "Conectando...",
+  hintVerifyingText: "Verificando...",
+  hintCheckCompleteText: "Verificación completada",
+  hintHoldFaceForFreshnessText: "Mantente quieto",
+
   // Advertencia de fotosensibilidad
   photosensitivityWarningHeadingText: "Advertencia de fotosensibilidad",
   photosensitivityWarningBodyText:
