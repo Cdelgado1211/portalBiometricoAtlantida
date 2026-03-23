@@ -63,28 +63,15 @@ export const useBiometricFlow = (): UseBiometricFlowResult => {
     }
   }, [uiState]);
 
-  useEffect(() => {
-    const search = window.location.search;
-    const sessionId = getQueryParam("session", search);
-
-    if (!sessionId) {
-      setBiometricSessionId(null);
-      setUiState(BiometricUiState.MISSING_SESSION_PARAM);
-      return;
-    }
-
+  const loadSession = (sessionId: string) => {
     setBiometricSessionId(sessionId);
     setUiState(BiometricUiState.INITIAL_LOADING);
 
     resolveBiometricSession(sessionId)
       .then((response) => {
+        // El backend ya calcula si la sesión es válida
+        // considerando expiración y máximo de intentos.
         if (!response.ok || response.valid === false) {
-          setUiState(BiometricUiState.SESSION_INVALID);
-          setErrorType("session-invalid");
-          return;
-        }
-
-        if (response.status !== "PENDING" && response.status !== "LIVENESS_CREATED") {
           setUiState(BiometricUiState.SESSION_INVALID);
           setErrorType("session-invalid");
           return;
@@ -99,6 +86,19 @@ export const useBiometricFlow = (): UseBiometricFlowResult => {
         setUiState(BiometricUiState.ERROR);
         setErrorType("network");
       });
+  };
+
+  useEffect(() => {
+    const search = window.location.search;
+    const sessionId = getQueryParam("session", search);
+
+    if (!sessionId) {
+      setBiometricSessionId(null);
+      setUiState(BiometricUiState.MISSING_SESSION_PARAM);
+      return;
+    }
+
+    loadSession(sessionId);
   }, []);
 
   const handleStartLiveness = () => {
@@ -173,7 +173,18 @@ export const useBiometricFlow = (): UseBiometricFlowResult => {
   };
 
   const handleRetry = () => {
-    window.location.reload();
+    if (!biometricSessionId) {
+      const search = window.location.search;
+      const sessionId = getQueryParam("session", search);
+      if (sessionId) {
+        loadSession(sessionId);
+      } else {
+        setUiState(BiometricUiState.MISSING_SESSION_PARAM);
+      }
+      return;
+    }
+
+    loadSession(biometricSessionId);
   };
 
   return {
