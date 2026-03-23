@@ -4,6 +4,7 @@ import "@aws-amplify/ui-react/styles.css";
 import styles from "../styles/Liveness.module.css";
 import { RekognitionSessionInfo } from "../types/biometric";
 import { UI_TEXTS } from "../constants/texts";
+import { LIVENESS_DISPLAY_TEXT_ES } from "../constants/livenessDisplayTextEs";
 
 interface LivenessStepProps {
   biometricSessionId: string;
@@ -28,6 +29,7 @@ export const LivenessStep: React.FC<LivenessStepProps> = ({
         <FaceLivenessDetector
           sessionId={rekognitionSession.sessionId}
           region={rekognitionSession.region}
+          displayText={LIVENESS_DISPLAY_TEXT_ES}
           onAnalysisComplete={onComplete}
           onError={(err) => {
             // Logueamos el error bruto que entrega el componente

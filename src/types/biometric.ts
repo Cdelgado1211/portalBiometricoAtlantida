@@ -61,6 +61,23 @@ export interface ValidateIdentityResponse {
   reason?: string;
 }
 
+export interface ValidateIdCardRequest extends BaseActionRequest {
+  image_base64: string;
+  rekognition_session_id: string;
+  face_match_threshold?: number;
+  liveness_threshold?: number;
+}
+
+export interface ValidateIdCardResponse {
+  ok: boolean;
+  validated: boolean;
+  reason?: string;
+  liveness_confidence?: number;
+  face_match_threshold?: number;
+  top_similarity?: number;
+  matches_found?: number;
+}
+
 export interface RekognitionSessionInfo {
   sessionId: string;
   region: string;

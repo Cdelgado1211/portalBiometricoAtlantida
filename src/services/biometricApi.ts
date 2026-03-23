@@ -5,7 +5,9 @@ import {
   CreateLivenessSessionRequest,
   CreateLivenessSessionResponse,
   ValidateIdentityRequest,
-  ValidateIdentityResponse
+  ValidateIdentityResponse,
+  ValidateIdCardRequest,
+  ValidateIdCardResponse
 } from "../types/biometric";
 
 export function resolveBiometricSession(
@@ -34,6 +36,17 @@ export function createLivenessSession(
   );
 }
 
+export function createLivenessSessionPoc(): Promise<CreateLivenessSessionResponse> {
+  const payload = {
+    action: "create_liveness_session_poc"
+  };
+
+  return httpPost<typeof payload, CreateLivenessSessionResponse>(
+    "/",
+    payload
+  );
+}
+
 export function validateIdentity(
   biometricSessionId: string,
   rekognitionSessionId: string
@@ -44,6 +57,26 @@ export function validateIdentity(
     rekognition_session_id: rekognitionSessionId
   };
   return httpPost<ValidateIdentityRequest, ValidateIdentityResponse>(
+    "/",
+    payload
+  );
+}
+
+export function validateIdCard(
+  imageBase64: string,
+  rekognitionSessionId: string,
+  faceMatchThreshold?: number
+): Promise<ValidateIdCardResponse> {
+  const payload: ValidateIdCardRequest = {
+    action: "validate_id_card",
+    image_base64: imageBase64,
+    rekognition_session_id: rekognitionSessionId,
+    ...(faceMatchThreshold !== undefined
+      ? { face_match_threshold: faceMatchThreshold }
+      : {})
+  };
+
+  return httpPost<ValidateIdCardRequest, ValidateIdCardResponse>(
     "/",
     payload
   );
